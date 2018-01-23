@@ -77,10 +77,11 @@ while(True):
             noseB = tuple(shape[33])
             #CHIN BOTTOM POINT
             chinB = tuple(shape[8])
+            tmp = numpy.subtract(numpy.mean((shape[6], shape[9]), axis=0),chinB)
             #CHIN LEFT POINT; CALCULATING MORE PRECISE ONE
-            chinL = tuple(numpy.mean((shape[6], shape[7]), axis=0))
+            chinL = tuple(numpy.subtract(numpy.mean((shape[6], shape[7]), axis=0),tmp))
             #CHIN RIGHT POINT; CALCULATING MORE PRECISE ONE
-            chinR = tuple(numpy.mean((shape[9], shape[10]), axis=0))
+            chinR = tuple(numpy.subtract(numpy.mean((shape[9], shape[10]), axis=0),tmp))
 
             #THE DIFFERENCE (eyeM - chinB) EQUALS 2/3 OF THE FACE
             tmp = numpy.subtract(eyeM, chinB)
@@ -88,9 +89,9 @@ while(True):
             tmp = tuple([int(x / 2) for x in tmp])
 
             #EDGE POINT TOP LEFT
-            edgeTL = tuple(numpy.add(eyeL, tmp))
+            edgeTL = tuple(numpy.add(shape[19], tmp))
             #EDGE POINT TOP RIGHT
-            edgeTR = tuple(numpy.add(eyeR, tmp))
+            edgeTR = tuple(numpy.add(shape[24], tmp))
 
             edgeTL = get_intersection(edgeTL[0], edgeTL[1], edgeTR[0], edgeTR[1], eyeL[0],
                                    eyeL[1], chinB[0], chinB[1])
