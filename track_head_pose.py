@@ -93,29 +93,35 @@ while(True):
             #GET 1/3 OF THE FACE
             tmp = tuple([int(x / 2) for x in tmp])
 
-            #EDGE POINT TOP LEFT
+            #CALCULATING THE EDGES FOR THE BOX WE ARE GOING TO DRAW
+            #EDGE POINT TOP LEFT, LEFT EYEBROW + 1/3 OF THE FACE SO WE GET THE FOREHEAD LINE
             edgeTL = tuple(numpy.add(shape[19], tmp))
-            #EDGE POINT TOP RIGHT
+            #EDGE POINT TOP RIGHT, RIGHT EYEBROW + 1/3 OF THE FACE SO WE GET THE FOREHEAD LINE
             edgeTR = tuple(numpy.add(shape[24], tmp))
 
+            #MOVE THE TOP LEFT EDGE LEFT IN LINE WITH THE CHIN AND LEFT EYE - ESTIMATING FOREHEAD WIDTH
             edgeTL = get_intersection(edgeTL[0], edgeTL[1], edgeTR[0], edgeTR[1], eyeL[0],
                                    eyeL[1], chinB[0], chinB[1])
+                                   
+            #MOVE THE TOP RIGHT EDGE RIGHT IN LINE WITH THE CHIN AND RIGHT EYE - ESTIMATING FOREHEAD WIDTH
             edgeTR = get_intersection(edgeTR[0], edgeTR[1], edgeTL[0], edgeTL[1], eyeR[0],
                                    eyeR[1], chinB[0], chinB[1])
 
             tmp = numpy.subtract(eyeM, chinB)
 
-            #EDGE POINT BOTTOM LEFT
+            #EDGE POINT BOTTOM LEFT, CALCULATE HORIZONTAL POSITION
             edgeBL = tuple(numpy.subtract(edgeTL, tmp))
-            #EDGE POINT BOTTOM RIGHT
+            #EDGE POINT BOTTOM RIGHT, CALCULATE HORIZONTAL POSITION
             edgeBR = tuple(numpy.subtract(edgeTR, tmp))
 
+            #EDGE POINT BOTTOM LEFT, CALCULATE VERTICAL POSITION - IN LINE WITH CHIN SLOPE
             edgeBL = get_intersection(edgeTL[0], edgeTL[1], edgeBL[0], edgeBL[1], chinL[0], chinL[1],
                                    chinR[0], chinR[1])
+            #EDGE POINT BOTTOM RIGHT, CALCULATE VERTICAL POSITION - IN LINE WITH CHIN SLOPE
             edgeBR = get_intersection(edgeTR[0], edgeTR[1], edgeBR[0], edgeBR[1], chinR[0], chinR[1],
                                    chinL[0], chinL[1])
 
-            #CALCULATE HEAD MOVEMENT OFFSET FROM THE CENTER
+            #CALCULATE HEAD MOVEMENT OFFSET FROM THE CENTER, lipU - lipL IS THE DISTANCE FROM BOTH LIPS (IN CASE MOUTH IS OPEN)
             offset = (float(noseT[0] - 2 * noseB[0] + chinB[0] + lipU[0]-lipL[0]) * 4,
                       float(noseT[1] - 2 * noseB[1] + chinB[1] + lipU[1]-lipL[1]) * 4)
 
