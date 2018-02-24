@@ -75,6 +75,11 @@ while(True):
 
             #NOSE BOTTOM POINT
             noseB = tuple(shape[33])
+            #UPPER LIP BOTTOM MID POINT
+            lipU = tuple(shape[62])
+            #LOWER LIP TOP MID POINT
+            lipL = tuple(shape[66])
+
             #CHIN BOTTOM POINT
             chinB = tuple(shape[8])
             tmp = numpy.subtract(numpy.mean((shape[6], shape[9]), axis=0),chinB)
@@ -111,25 +116,26 @@ while(True):
                                    chinL[0], chinL[1])
 
             #CALCULATE HEAD MOVEMENT OFFSET FROM THE CENTER
-            offset = (float(noseT[0] - 2 * noseB[0] + chinB[0]) * 4,
-                      float(noseT[1] - 2 * noseB[1] + chinB[1]) * 4)
+            offset = (float(noseT[0] - 2 * noseB[0] + chinB[0] + lipU[0]-lipL[0]) * 4,
+                      float(noseT[1] - 2 * noseB[1] + chinB[1] + lipU[1]-lipL[1]) * 4)
 
             #BACKGROUND RECTANGLE
             recB = (edgeTL, edgeTR, edgeBR, edgeBL)
+            
             #FOREBACKGROUND RECTANGLE
             recF = (scale_faceangle((recB), 1.5, offset))
 
             #DRAW FACIAL LANDMARK COORDINATES
             for (x, y) in shape:
-                cv2.circle(frame, (x, y), 1, (0, 0, 255), 5)
+                cv2.circle(frame, (x, y), 1, (255, 0, 255), 5)
 
             #DRAW BACKGROUND RECTANGLE
             cv2.polylines(frame, numpy.array([recB], numpy.int32), True,
-                          (255, 0, 0), 2)
+                          (255, 0, 0), 5)
 
             #DRAW FACE BOX EDGE LINES
             for i in range(4):
-                cv2.line(frame, recB[i], recF[i], (255, 255, 0), 2)
+                cv2.line(frame, recB[i], recF[i], (255, 255, 0), 5)
 
             #DRAW NOSE DIRECTION LINE
             cv2.line(
@@ -141,7 +147,7 @@ while(True):
 
             #DRAW FOREGROUNDBACKGROUND RECTANGLE
             cv2.polylines(frame, numpy.array([recF], numpy.int32), True,
-                          (0, 255, 0), 2)
+                          (0, 255, 0), 5)
 
     cv2.imshow('Frame', frame)
 
